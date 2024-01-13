@@ -6,26 +6,8 @@ const initialState = {
       id: 1,
       categoryName: "Todas las tareas",
       emoji: "🎯",
-      tasks: [
-        // {
-        //   id: "1",
-        //   taskText: "Tarea 1",
-        //   completed: false,
-        //   deadline: "12/02/24",
-        // },
-        // {
-        //   id: "2",
-        //   taskText: "Tarea 2",
-        //   completed: false,
-        //   deadline: "12/02/24",
-        // },
-        // {
-        //   id: "3",
-        //   taskText: "Tarea 3",
-        //   completed: false,
-        //   deadline: "12/02/24",
-        // },
-      ],
+      tasks: [],
+      color: "",
     },
   ],
   isModalOpen: false,
@@ -38,9 +20,9 @@ const categoriesSlice = createSlice({
   initialState,
   reducers: {
     addCategory: {
-      prepare(categoryName, emoji) {
+      prepare(categoryName, emoji, color) {
         return {
-          payload: { id: Date.now(), categoryName, emoji, tasks: [] },
+          payload: { id: Date.now(), categoryName, emoji, tasks: [], color },
         };
       },
 
@@ -101,6 +83,31 @@ const categoriesSlice = createSlice({
       },
     },
 
+    completeTask: {
+      prepare(categoryId, taskId) {
+        return {
+          payload: { categoryId, taskId },
+        };
+      },
+
+      reducer(state, action) {
+        const { categoryId, taskId } = action.payload;
+        const existingCategory = state.categories.find(
+          (category) => category.id === Number(categoryId),
+        );
+
+        if (existingCategory) {
+          const existingTask = existingCategory.tasks.find(
+            (task) => task.id === taskId,
+          );
+
+          if (existingTask) {
+            existingTask.completed = !existingTask.completed;
+          }
+        }
+      },
+    },
+
     toggleCategoryModal(state) {
       state.isNewCategoryFormOpen = !state.isNewCategoryFormOpen;
     },
@@ -110,6 +117,7 @@ const categoriesSlice = createSlice({
     toggleTaskModal(state) {
       state.isNewTaskFormOpen = !state.isNewTaskFormOpen;
     },
+
     deleteCategory(state, action) {
       const { categoryId } = action.payload;
       state.categories = state.categories.filter(
@@ -126,6 +134,7 @@ export function getCategoryById(state, categoryId) {
 export const {
   addCategory,
   addTask,
+  completeTask,
   deleteTask,
   toggleModal,
   toggleCategoryModal,

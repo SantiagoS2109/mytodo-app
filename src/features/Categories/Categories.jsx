@@ -31,6 +31,7 @@ function Categories() {
             categoria={categoria.categoryName}
             emoji={categoria.emoji}
             tareas={categoria.tasks.length}
+            color={categoria.color}
           />
         ))}
       </ul>

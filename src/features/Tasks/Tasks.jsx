@@ -17,9 +17,6 @@ function Tasks() {
 
   const allTasks = categories.map((category) => category.tasks).flat();
 
-  console.log(allTasks);
-  console.log(currentCategory);
-
   const isNewTaskFormOpen = useSelector(
     (state) => state.categories.isNewTaskFormOpen,
   );
@@ -44,10 +41,20 @@ function Tasks() {
       <ul className="grid  max-h-[310px] grid-cols-1 gap-4 overflow-scroll p-2">
         {Number(id) === 1
           ? allTasks.map((task) => (
-              <TaskItem categoryId={id} key={task.id} task={task} />
+              <TaskItem
+                categoryId={id}
+                key={task.id}
+                task={task}
+                color={currentCategory.color}
+              />
             ))
           : currentCategory.tasks.map((task) => (
-              <TaskItem categoryId={id} key={task.id} task={task} />
+              <TaskItem
+                categoryId={id}
+                key={task.id}
+                task={task}
+                color={currentCategory.color}
+              />
             ))}
       </ul>
 

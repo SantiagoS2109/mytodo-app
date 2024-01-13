@@ -3,24 +3,24 @@ import Button from "../ui/Button";
 import { useDispatch } from "react-redux";
 import { addCategory, toggleCategoryModal } from "./categoriesSlice";
 import { useState } from "react";
-import { Smiley } from "@phosphor-icons/react";
+import { Smiley, X } from "@phosphor-icons/react";
 import Picker from "emoji-picker-react";
+import { CirclePicker } from "react-color";
 
 function ModalNuevaCategoria() {
   const dispatch = useDispatch();
   const [categoryName, setCategoryName] = useState("");
   const [emoji, setEmoji] = useState("");
+  const [color, setColor] = useState("");
 
   const [showPicker, setShowPicker] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (!categoryName) return;
+    if (!categoryName || !color || !emoji) return;
 
-    console.log(categoryName, emoji);
-
-    dispatch(addCategory(categoryName, emoji));
+    dispatch(addCategory(categoryName, emoji, color));
     dispatch(toggleCategoryModal());
 
     setEmoji("");
@@ -30,6 +30,10 @@ function ModalNuevaCategoria() {
   const onEmojiClick = (event) => {
     setEmoji(event.emoji);
     setShowPicker(false);
+  };
+
+  const handleColorChange = (color) => {
+    setColor(color.hex);
   };
 
   return (
@@ -43,6 +47,7 @@ function ModalNuevaCategoria() {
             placeholder={"Ingresa el nombre de la categoría"}
             style={"mb-4"}
           />
+
           <div className="flex w-full items-center justify-between gap-2">
             <Input
               isDisabled={true}
@@ -59,6 +64,12 @@ function ModalNuevaCategoria() {
               <Smiley weight="bold" size={32} color="#1D6D81" />
             </div>
           </div>
+
+          {!showPicker && (
+            <div className="itm my-4 flex justify-center">
+              <CirclePicker color={color} onChange={handleColorChange} />
+            </div>
+          )}
 
           {showPicker && (
             <Picker
@@ -80,9 +91,9 @@ function ModalNuevaCategoria() {
         </form>
         <button
           onClick={() => dispatch(toggleCategoryModal())}
-          className="absolute right-6 top-6"
+          className="absolute right-6 top-6 font-medium transition-all duration-300 hover:text-red-500"
         >
-          X
+          <X size={24} />
         </button>
       </div>
     </div>

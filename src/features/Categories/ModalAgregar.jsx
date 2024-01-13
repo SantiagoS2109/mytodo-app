@@ -7,19 +7,18 @@ function ModalAgregar() {
   return (
     <div className="absolute bottom-[130px] right-6 h-32 w-1/2 rounded-md bg-slate-100 shadow-lg">
       <ul className="flex h-full w-full flex-col items-center justify-center gap-3 p-4">
-        <li className="w-full rounded-sm border-s-4 border-primary bg-white p-2 ">
-          <button
-            onClick={() => {
-              dispatch(toggleCategoryModal());
-              dispatch(toggleModal());
-            }}
-          >
-            Agregar categoria
-          </button>
+        <li
+          onClick={() => {
+            dispatch(toggleCategoryModal());
+            dispatch(toggleModal());
+          }}
+          className="w-full cursor-pointer rounded-sm border-s-4 border-primary bg-white p-2 "
+        >
+          <button>Agregar categoria</button>
         </li>
-        <li className="w-full rounded-sm border-s-4 border-primary bg-white p-2 ">
+        {/* <li className="w-full cursor-pointer rounded-sm border-s-4 border-primary bg-white p-2 ">
           <button>Agregar tarea</button>
-        </li>
+        </li> */}
       </ul>
     </div>
   );

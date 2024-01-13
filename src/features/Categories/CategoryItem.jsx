@@ -2,12 +2,12 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 
-function CategoryItem({ categoria, emoji, tareas, id }) {
+function CategoryItem({ categoria, emoji, tareas, id, color }) {
   CategoryItem.propTypes = {
     id: PropTypes.number.isRequired,
     categoria: PropTypes.string.isRequired,
     emoji: PropTypes.string.isRequired,
-    tareas: PropTypes.string.isRequired,
+    tareas: PropTypes.number.isRequired,
     color: PropTypes.any,
   };
 
@@ -18,7 +18,8 @@ function CategoryItem({ categoria, emoji, tareas, id }) {
     <li>
       <Link className="contents" to={`/app/tasks/${id}`}>
         <div
-          className={`flex h-36 w-36 flex-col justify-between rounded-lg border-s-[6px] border-primary px-4 py-2 shadow-xl`}
+          className={`flex h-36 w-36 flex-col justify-between rounded-lg  border-s-[6px] px-4 py-2 shadow-xl`}
+          style={{ borderColor: `${color ? color : "#1D6D81"}` }}
         >
           <span className="text-[32px]">{emoji}</span>
           <span className="text-xl font-medium">{categoria}</span>
