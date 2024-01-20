@@ -1,6 +1,14 @@
 import PropTypes from "prop-types";
 
-function Input({ placeholder, value, setValue, style, isDisabled, type }) {
+function Input({
+  placeholder,
+  value,
+  setValue,
+  style,
+  isDisabled,
+  type,
+  name,
+}) {
   Input.propTypes = {
     placeholder: PropTypes.string,
     value: PropTypes.string,
@@ -8,6 +16,7 @@ function Input({ placeholder, value, setValue, style, isDisabled, type }) {
     style: PropTypes.string,
     isDisabled: PropTypes.bool,
     type: PropTypes.string,
+    name: PropTypes.string,
   };
 
   const styleBase =
@@ -17,6 +26,7 @@ function Input({ placeholder, value, setValue, style, isDisabled, type }) {
     return (
       <textarea
         type="textarea"
+        name={name}
         placeholder={placeholder}
         value={value}
         disabled={isDisabled}
@@ -29,6 +39,7 @@ function Input({ placeholder, value, setValue, style, isDisabled, type }) {
     return (
       <input
         type="date"
+        name={name}
         placeholder={placeholder}
         value={value}
         disabled={isDisabled}
@@ -40,6 +51,7 @@ function Input({ placeholder, value, setValue, style, isDisabled, type }) {
   return (
     <input
       type="text"
+      name={name}
       placeholder={placeholder}
       value={value}
       disabled={isDisabled}

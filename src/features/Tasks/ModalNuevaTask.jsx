@@ -4,6 +4,7 @@ import { addTask, toggleTaskModal } from "../Categories/categoriesSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { X } from "@phosphor-icons/react";
 
 function ModalNuevaTask() {
   const dispatch = useDispatch();
@@ -38,10 +39,11 @@ function ModalNuevaTask() {
             type={"textarea"}
           />
           <div className="flex w-full items-center justify-between gap-2">
+            <label htmlFor="date">Fecha</label>
             <Input
+              name={"date"}
               value={deadline}
               setValue={setDeadline}
-              placeholder={"Deadline"}
               type={"date"}
             />
           </div>
@@ -54,7 +56,7 @@ function ModalNuevaTask() {
           onClick={() => dispatch(toggleTaskModal())}
           className="absolute right-6 top-6"
         >
-          X
+          <X size={24} />
         </button>
       </div>
     </div>

@@ -13,8 +13,7 @@ function TaskItem({ categoryId, task }) {
   const categories = useSelector((state) => state.categories.categories);
   const dispatch = useDispatch();
 
-  console.log(categories);
-  console.log(categoryId);
+  const pastDeadline = new Date(task.deadline) < new Date();
 
   const currentColor = categories.find(
     (category) => category.id === Number(categoryId),
@@ -33,14 +32,19 @@ function TaskItem({ categoryId, task }) {
         )}
       </button>
       <div>
-        <span className={`text-xl ${task.completed ? "line-through" : ""}`}>
+        <span
+          className={`text-xl ${task.completed ? "line-through" : ""} ${
+            pastDeadline ? "text-red-600" : ""
+          }`}
+        >
           {task.taskText}
         </span>
-        <p className="text-grey-darker">{task.deadline}</p>
+        <p className={`text-grey-darker ${pastDeadline ? "text-red-600" : ""}`}>
+          {task.deadline}
+        </p>
       </div>
       <button
         onClick={() => {
-          alert("¿Estás seguro que quieres eliminar esta tarea?");
           dispatch(deleteTask(categoryId, task.id));
         }}
         className="ms-auto text-[#e03131] "

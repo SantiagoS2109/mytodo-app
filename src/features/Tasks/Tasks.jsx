@@ -1,11 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import TaskItem from "./TaskItem";
 import {
+  deleteCategory,
   getCategoryById,
   toggleTaskModal,
 } from "../Categories/categoriesSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ModalNuevaTask from "./ModalNuevaTask";
+import { Trash } from "@phosphor-icons/react/dist/ssr";
 
 function Tasks() {
   const navigate = useNavigate();
@@ -24,21 +26,37 @@ function Tasks() {
   return (
     <>
       <div>
-        <button
-          className="mb-2 text-6xl font-medium"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate(-1);
-          }}
-        >
-          &larr;
-        </button>
+        <div className="flex justify-between">
+          <button
+            className="mb-2 text-6xl font-medium"
+            onClick={() => navigate(-1)}
+          >
+            &larr;
+          </button>
+
+          <button
+            onClick={() => {
+              dispatch(deleteCategory(id));
+              navigate("/app");
+            }}
+          >
+            <Trash size={32} color={"#9b1212"} />
+          </button>
+        </div>
         <h2 className="text-4xl font-medium">
           {currentCategory.emoji} {currentCategory.categoryName}
         </h2>
       </div>
 
-      <ul className="grid  max-h-[310px] grid-cols-1 gap-4 overflow-scroll p-2">
+      <ul className="grid max-h-[310px] grid-cols-1 gap-4 overflow-scroll p-2">
+        {currentCategory.tasks.length === 0 && (
+          <div className="flex items-center justify-center">
+            <span className="text-lg font-medium">
+              Aún no hay tareas. Empieza por agregar algunas. 🎯
+            </span>
+          </div>
+        )}
+
         {Number(id) === 1
           ? allTasks.map((task) => (
               <TaskItem

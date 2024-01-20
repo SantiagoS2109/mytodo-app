@@ -119,9 +119,10 @@ const categoriesSlice = createSlice({
     },
 
     deleteCategory(state, action) {
-      const { categoryId } = action.payload;
+      const categoryId = action.payload;
+
       state.categories = state.categories.filter(
-        (category) => category.id !== categoryId,
+        (category) => category.id !== Number(categoryId),
       );
     },
   },

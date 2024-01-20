@@ -2,8 +2,8 @@ import { Outlet } from "react-router-dom";
 
 function AppLayout() {
   return (
-    <div className="md:w-[680px] md:m-auto">
-      <div className="h-dvh grid grid-cols-1 py-10 px-6 md:gap-6 relative">
+    <div className="md:m-auto md:w-[680px]">
+      <div className="relative grid h-dvh grid-cols-1 px-6 py-10 md:gap-6">
         <Outlet />
       </div>
     </div>
