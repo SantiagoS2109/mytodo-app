@@ -1,5 +1,3 @@
-// import Homepage from "./features/User/Homepage";
-
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Categories from "./features/Categories/Categories";
 import Homepage from "./features/User/Homepage";

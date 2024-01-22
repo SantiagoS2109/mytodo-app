@@ -11,7 +11,7 @@ function CategoryItem({ categoria, emoji, tareas, id, color }) {
     color: PropTypes.any,
   };
 
-  const categories = useSelector((state) => state.categories.categories);
+  const categories = useSelector((state) => state.toDo.categories);
   const allTasks = categories.map((category) => category.tasks).flat().length;
 
   return (

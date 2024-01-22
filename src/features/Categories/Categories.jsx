@@ -1,20 +1,14 @@
+import { useSelector } from "react-redux";
+
 import CategoryItem from "./CategoryItem";
-import ModalAgregar from "./ModalAgregar";
-import { useDispatch, useSelector } from "react-redux";
 import ModalNuevaCategoria from "./ModalNuevaCategoria";
-import { toggleModal } from "./categoriesSlice";
+
+import Modal from "../ui/Modal";
+import Button from "../ui/Button";
 
 function Categories() {
-  // const [showModal, setShowModal] = useState(false);
-
-  const dispatch = useDispatch();
-
   const username = useSelector((state) => state.user.username);
-  const categories = useSelector((state) => state.categories.categories);
-  const isModalOpen = useSelector((state) => state.categories.isModalOpen);
-  const isOpenNewCategory = useSelector(
-    (state) => state.categories.isNewCategoryFormOpen,
-  );
+  const categories = useSelector((state) => state.toDo.categories);
 
   return (
     <>
@@ -37,17 +31,20 @@ function Categories() {
       </ul>
 
       <div className="flex items-end justify-end">
-        <button
-          onClick={() => dispatch(toggleModal())}
-          className="h-20 w-20 rounded-full bg-primary text-6xl text-white xl:h-14 xl:w-14 xl:text-4xl"
-        >
-          +
-        </button>
+        <Modal>
+          <Modal.Open name="newCategory">
+            <Button
+              type="rounded"
+              className="h-20 w-20 bg-primary text-6xl text-white xl:h-14 xl:w-14 xl:text-4xl"
+            >
+              +
+            </Button>
+          </Modal.Open>
+          <Modal.Window name="newCategory">
+            <ModalNuevaCategoria />
+          </Modal.Window>
+        </Modal>
       </div>
-
-      {isModalOpen && !isOpenNewCategory && <ModalAgregar />}
-
-      {isOpenNewCategory && <ModalNuevaCategoria />}
     </>
   );
 }

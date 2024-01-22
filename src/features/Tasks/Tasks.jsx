@@ -1,55 +1,73 @@
 import { useNavigate, useParams } from "react-router-dom";
-import TaskItem from "./TaskItem";
-import {
-  deleteCategory,
-  getCategoryById,
-  toggleTaskModal,
-} from "../Categories/categoriesSlice";
-import { useDispatch, useSelector } from "react-redux";
-import ModalNuevaTask from "./ModalNuevaTask";
+import { useSelector } from "react-redux";
 import { Trash } from "@phosphor-icons/react/dist/ssr";
+
+import TaskItem from "./TaskItem";
+import ModalNuevaTask from "./ModalNuevaTask";
+import Modal from "../ui/Modal";
+
+import { getCategoryById } from "../../toDoSlice";
+import DeleteCategory from "../Categories/DeleteCategory";
+import Button from "../ui/Button";
 
 function Tasks() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const dispatch = useDispatch();
 
-  const categories = useSelector((state) => state.categories.categories);
+  const categories = useSelector((state) => state.toDo.categories);
   const currentCategory = getCategoryById(categories, id);
 
   const allTasks = categories.map((category) => category.tasks).flat();
+  const sortedAllTasks = allTasks
+    .sort((a, b) => new Date(b.deadline) - new Date(a.deadline))
+    .sort((a, b) => a.completed - b.completed);
 
-  const isNewTaskFormOpen = useSelector(
-    (state) => state.categories.isNewTaskFormOpen,
-  );
+  const tasks = [...currentCategory.tasks];
+  const sortedTasks = tasks
+    .sort((a, b) => new Date(b.deadline) - new Date(a.deadline))
+    .sort((a, b) => a.completed - b.completed);
+
+  console.log("allTasks", allTasks);
 
   return (
     <>
       <div>
         <div className="flex justify-between">
-          <button
+          <Button
             className="mb-2 text-6xl font-medium"
             onClick={() => navigate(-1)}
           >
             &larr;
-          </button>
+          </Button>
 
-          <button
-            onClick={() => {
-              dispatch(deleteCategory(id));
-              navigate("/app");
-            }}
-          >
-            <Trash size={32} color={"#9b1212"} />
-          </button>
+          {id !== "1" && (
+            <Modal>
+              <Modal.Open name="delete">
+                <Button>
+                  <Trash size={32} color={"#e03131"} />
+                </Button>
+              </Modal.Open>
+              <Modal.Window name="delete">
+                <DeleteCategory id={id} />
+              </Modal.Window>
+            </Modal>
+          )}
         </div>
         <h2 className="text-4xl font-medium">
           {currentCategory.emoji} {currentCategory.categoryName}
         </h2>
       </div>
 
-      <ul className="grid max-h-[310px] grid-cols-1 gap-4 overflow-scroll p-2">
-        {currentCategory.tasks.length === 0 && (
+      <ul className="grid max-h-[310px] grid-cols-1 gap-4 overflow-scroll px-6 py-2">
+        {Number(id) === 1 && allTasks.length === 0 && (
+          <div className="flex items-center justify-center">
+            <span className="text-lg font-medium">
+              Aún no hay tareas. Empieza por agregar algunas. 🎯
+            </span>
+          </div>
+        )}
+
+        {Number(id) !== 1 && currentCategory.tasks.length === 0 && (
           <div className="flex items-center justify-center">
             <span className="text-lg font-medium">
               Aún no hay tareas. Empieza por agregar algunas. 🎯
@@ -58,34 +76,33 @@ function Tasks() {
         )}
 
         {Number(id) === 1
-          ? allTasks.map((task) => (
+          ? sortedAllTasks.map((task) => (
               <TaskItem
-                categoryId={id}
+                categoryId={task.categoryId}
                 key={task.id}
                 task={task}
-                color={currentCategory.color}
               />
             ))
-          : currentCategory.tasks.map((task) => (
-              <TaskItem
-                categoryId={id}
-                key={task.id}
-                task={task}
-                color={currentCategory.color}
-              />
+          : sortedTasks.map((task) => (
+              <TaskItem categoryId={id} key={task.id} task={task} />
             ))}
       </ul>
 
       <div className="flex items-end justify-end">
-        <button
-          onClick={() => dispatch(toggleTaskModal())}
-          className="h-20 w-20 rounded-full bg-primary text-6xl text-white xl:h-14 xl:w-14 xl:text-4xl"
-        >
-          +
-        </button>
+        <Modal>
+          <Modal.Open name="newTask">
+            <Button
+              type="rounded"
+              className="h-20 w-20 bg-primary text-6xl text-white xl:h-14 xl:w-14 xl:text-4xl"
+            >
+              +
+            </Button>
+          </Modal.Open>
+          <Modal.Window name="newTask">
+            <ModalNuevaTask />
+          </Modal.Window>
+        </Modal>
       </div>
-
-      {isNewTaskFormOpen && <ModalNuevaTask />}
     </>
   );
 }

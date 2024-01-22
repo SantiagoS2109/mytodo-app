@@ -1,21 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  categories: [
-    {
-      id: 1,
-      categoryName: "Todas las tareas",
-      emoji: "🎯",
-      tasks: [],
-      color: "",
-    },
-  ],
-  isModalOpen: false,
-  isNewCategoryFormOpen: false,
-  isNewTaskFormOpen: false,
-};
+const storedValue = localStorage.getItem("toDoStorage");
 
-const categoriesSlice = createSlice({
+let initialState = {};
+
+storedValue
+  ? (initialState = JSON.parse(storedValue))
+  : (initialState = {
+      categories: [
+        {
+          id: 1,
+          categoryName: "Todas las tareas",
+          emoji: "🎯",
+          tasks: [],
+          color: "#1D6D81",
+        },
+      ],
+    });
+
+const toDoSlice = createSlice({
   name: "categories",
   initialState,
   reducers: {
@@ -28,6 +31,8 @@ const categoriesSlice = createSlice({
 
       reducer(state, action) {
         state.categories.push(action.payload);
+
+        localStorage.setItem("toDoStorage", JSON.stringify(state));
       },
     },
 
@@ -54,10 +59,13 @@ const categoriesSlice = createSlice({
         if (existingCategory) {
           existingCategory.tasks.push({
             id,
+            categoryId,
             taskText,
             deadline,
             completed,
           });
+
+          localStorage.setItem("toDoStorage", JSON.stringify(state));
         }
       },
     },
@@ -79,6 +87,8 @@ const categoriesSlice = createSlice({
           existingCategory.tasks = existingCategory.tasks.filter(
             (task) => task.id !== taskId,
           );
+
+          localStorage.setItem("toDoStorage", JSON.stringify(state));
         }
       },
     },
@@ -103,19 +113,11 @@ const categoriesSlice = createSlice({
 
           if (existingTask) {
             existingTask.completed = !existingTask.completed;
+
+            localStorage.setItem("toDoStorage", JSON.stringify(state));
           }
         }
       },
-    },
-
-    toggleCategoryModal(state) {
-      state.isNewCategoryFormOpen = !state.isNewCategoryFormOpen;
-    },
-    toggleModal(state) {
-      state.isModalOpen = !state.isModalOpen;
-    },
-    toggleTaskModal(state) {
-      state.isNewTaskFormOpen = !state.isNewTaskFormOpen;
     },
 
     deleteCategory(state, action) {
@@ -124,6 +126,8 @@ const categoriesSlice = createSlice({
       state.categories = state.categories.filter(
         (category) => category.id !== Number(categoryId),
       );
+
+      localStorage.setItem("toDoStorage", JSON.stringify(state));
     },
   },
 });
@@ -137,10 +141,7 @@ export const {
   addTask,
   completeTask,
   deleteTask,
-  toggleModal,
-  toggleCategoryModal,
-  toggleTaskModal,
   deleteCategory,
-} = categoriesSlice.actions;
+} = toDoSlice.actions;
 
-export default categoriesSlice.reducer;
+export default toDoSlice.reducer;
