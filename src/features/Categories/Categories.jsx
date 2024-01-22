@@ -17,7 +17,7 @@ function Categories() {
         <h3 className="mt-2 text-2xl">Categorias</h3>
       </div>
 
-      <ul className="grid h-[460px] grid-cols-2 gap-x-6 gap-y-12 overflow-scroll sm:grid-cols-3 md:h-[340px] md:gap-x-0 md:gap-y-0">
+      <ul className="grid h-[460px] grid-cols-2 gap-x-3 gap-y-4 overflow-scroll p-6 sm:grid-cols-3 sm:gap-y-4 md:h-[340px] ">
         {categories.map((categoria) => (
           <CategoryItem
             key={categoria.id}

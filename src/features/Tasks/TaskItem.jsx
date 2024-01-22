@@ -41,16 +41,20 @@ function TaskItem({ categoryId, task }) {
       </Button>
       <div>
         <span
-          className={`text-xl ${task.completed ? "line-through" : ""} ${
+          className={`text-base ${task.completed ? "line-through" : ""} ${
             pastDeadline ? "text-red-600" : ""
           }`}
         >
           {task.taskText}
         </span>
-        <p className={`text-grey-darker ${pastDeadline ? "text-red-600" : ""}`}>
+        <p
+          className={`text-sm text-grey-darker ${
+            pastDeadline ? "text-red-600" : ""
+          }`}
+        >
           {task.deadline}
         </p>
-        <p className="text-sm font-medium " style={{ color: currentColor }}>
+        <p className="text-xs font-medium " style={{ color: currentColor }}>
           {Number(categoryId) !== Number(id) && categoryName}
         </p>
       </div>
